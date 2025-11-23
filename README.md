@@ -357,31 +357,48 @@ We're not a VC-funded startup pretending to be open source. This is actual open 
 
 ## 📅 Roadmap (Realistic Edition)
 
-**Q1 2025**
+**Q1 2026**
 - ✅ v1.0 spec finalized
 - ✅ C# and TypeScript implementations
 - 🚧 Python implementation
 - 🚧 VSCode syntax highlighter
 
-**Q2 2025**
+**Q2 2026**
 - Schema inference from JSON
 - AXON ↔️ SQL converters
 - Performance benchmarks (published)
 - Real-world case studies (if anyone actually uses this)
 
-**Q3 2025**
+**Q3 2026**
 - Streaming compression options
 - Advanced schema validation
 - Integration with LangChain/LlamaIndex (probably)
 
-**Q4 2025**
+**Q4 2026**
 - Depending on adoption: either mainstream usage or quiet deprecation
 - No shame either way—we tried
 
-**2026 and Beyond**
+**2027 and Beyond**
 - If AI bubble pops: AXON becomes a footnote in tech history alongside CORBA and SOAP
 - If AI stabilizes: AXON becomes a useful tool for production LLM systems
 - If AGI happens: None of this matters and we'll have bigger problems
+
+## 🎯 About This Project
+
+**A Note on Origins**: This project is the work of a solo developer from a large corporation. The PM-style commentary throughout this README? That's a satirical composition of the **worst people I've met in my professional life**—the buzzword enthusiasts, the "synergy" peddlers, the people who killed good ideas with "alignment meetings."
+
+**What That Actually Means**:
+- I'm a **developer**, not a PM. I build things that work.
+- The corporate-speak parody comes from **years of suffering through it** while trying to ship actual code
+- AXON was built with **real enterprise pain points** in mind (governance, compliance, auditability) because I've lived through the consequences of bad tooling choices
+- The self-aware sarcasm is a coping mechanism from watching genuinely useful engineering ideas get buried under layers of "stakeholder synergy"
+- The focus on **measurable results** over hype reflects what developers care about: does it actually work, or is it just more marketing BS?
+
+This isn't a VC-funded startup with a slick pitch deck. This is an engineer who got tired of inefficient data formats, knew better solutions exist, and actually built one during nights and weekends—while channeling all the corporate nonsense I've had to endure into dark comedy.
+
+**TL;DR**: Built by a dev who's survived too many bad PMs and turned that pain into motivation. The sarcasm is real. The format works.
+
+---
 
 ## 🎭 Final Thoughts (The Honest Version)
 
