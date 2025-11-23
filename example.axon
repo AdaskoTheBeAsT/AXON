@@ -1,0 +1,47 @@
+@schema User
+id:I
+name:S
+email:S
+active:B
+age:I?
+country:S?
+@end
+
+@data User[5]
+1|Alice|alice@example.com|1|28|US
+2|Bob|bob@example.com|0|_|UK
+3|Carol|carol@example.com|1|35|_
+4|Dave|dave@example.com|1|42|CA
+5|Eve|eve@example.com|0|31|AU
+@end
+
+@schema Order
+id:I
+userId:I
+total:F
+timestamp:T
+@end
+
+@data Order[4]
+101|1|299.99|2024-11-23T10:30:00Z
+102|2|149.50|2024-11-23T11:15:00Z
+103|1|89.99|2024-11-23T12:00:00Z
+104|3|499.00|2024-11-23T13:45:00Z
+@end
+
+@schema OrderItem
+orderId:I
+sku:S
+quantity:I
+price:F
+@end
+
+@data OrderItem[8]
+101|LAPTOP-X1|1|299.99
+102|MOUSE-A2|2|49.99
+102|KEYB-B3|1|49.52
+103|CABLE-C4|3|29.99
+104|MONITOR-D5|1|399.00
+104|STAND-E6|2|49.99
+104|HDMI-F7|1|0.01
+@end

@@ -230,17 +230,22 @@ Compact, pipe-delimited rows:
 
 ## 🛠️ Language Support (What Actually Exists)
 
-- ✅ **C# Reference Implementation** (.NET 10)
-- ✅ **TypeScript/JavaScript** (Node 24)
+- ✅ **C#** (.NET 10) - [`/csharp`](./csharp)
+- ✅ **TypeScript** (Node 24) - [`/typescript`](./typescript)
+- ✅ **Java** (Java 21) - [`/java`](./java)
+- ✅ **Go** (Go 1.23) - [`/go`](./go)
+- ✅ **Rust** (Rust 1.70+) - [`/rust`](./rust)
+- ✅ **C++** (C++17) - [`/cpp`](./cpp)
 - 🚧 **Python** (2025 roadmap - because of course Python)
-- 📋 **Rust** (planned - someone will demand this)
-- 📋 **Go** (planned - because microservices)
+
+**See [IMPLEMENTATIONS.md](./IMPLEMENTATIONS.md) for detailed usage and build instructions.**
 
 Each implementation includes:
 - Streaming O(n) parser
-- Schema builder/validator
-- JSON ↔️ AXON converter
-- CLI tools
+- Schema parsing with type validation
+- Data block parsing with type coercion
+- Null handling and string escaping
+- Example usage code
 
 ## 🏛️ Vision & Realistic Expectations
 

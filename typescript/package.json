@@ -1,0 +1,23 @@
+{
+  "name": "axon-parser",
+  "version": "1.0.0",
+  "description": "AXON format parser for Node 24+",
+  "type": "module",
+  "main": "./dist/axon-parser.js",
+  "types": "./dist/axon-parser.d.ts",
+  "scripts": {
+    "build": "tsc",
+    "example": "node --import tsx example.ts"
+  },
+  "engines": {
+    "node": ">=24.0.0"
+  },
+  "keywords": ["axon", "parser", "llm", "data-format"],
+  "author": "",
+  "license": "MIT",
+  "devDependencies": {
+    "@types/node": "^24.0.0",
+    "typescript": "^5.7.0",
+    "tsx": "^4.0.0"
+  }
+}
