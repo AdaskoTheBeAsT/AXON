@@ -1,0 +1,27 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" width="200" height="200">
+  <!-- Background circle -->
+  <circle cx="100" cy="100" r="95" fill="#1a73e8" stroke="#ff6b35" stroke-width="3"/>
+  
+  <!-- Neural axon structure - left side -->
+  <circle cx="50" cy="100" r="12" fill="#ff6b35" opacity="0.9"/>
+  <line x1="62" y1="100" x2="85" y2="100" stroke="#ffffff" stroke-width="4" stroke-linecap="round"/>
+  
+  <!-- The pipe delimiter - center (the pragmatic reality) -->
+  <rect x="97" y="70" width="6" height="60" fill="#ffffff" rx="3"/>
+  
+  <!-- Neural axon structure - right side -->
+  <line x1="115" y1="100" x2="138" y2="100" stroke="#ffffff" stroke-width="4" stroke-linecap="round"/>
+  <circle cx="150" cy="100" r="12" fill="#ff6b35" opacity="0.9"/>
+  
+  <!-- Synaptic connections (multiple outputs - like data flow) -->
+  <line x1="150" y1="100" x2="165" y2="85" stroke="#ffffff" stroke-width="2.5" stroke-linecap="round" opacity="0.7"/>
+  <line x1="150" y1="100" x2="165" y2="115" stroke="#ffffff" stroke-width="2.5" stroke-linecap="round" opacity="0.7"/>
+  <circle cx="168" cy="82" r="5" fill="#ff6b35" opacity="0.7"/>
+  <circle cx="168" cy="118" r="5" fill="#ff6b35" opacity="0.7"/>
+  
+  <!-- Small data nodes (representing structured data) -->
+  <circle cx="50" cy="85" r="3" fill="#ffffff" opacity="0.5"/>
+  <circle cx="50" cy="115" r="3" fill="#ffffff" opacity="0.5"/>
+  <line x1="50" y1="85" x2="50" y2="88" stroke="#ffffff" stroke-width="1" opacity="0.5"/>
+  <line x1="50" y1="112" x2="50" y2="115" stroke="#ffffff" stroke-width="1" opacity="0.5"/>
+</svg>

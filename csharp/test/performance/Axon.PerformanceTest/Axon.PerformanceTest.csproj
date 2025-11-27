@@ -1,0 +1,28 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <OutputType>Exe</OutputType>
+        <TargetFramework>net10.0</TargetFramework>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+        <LangVersion>14.0</LangVersion>
+        <StartupObject>Axon.Performance.Program</StartupObject>
+        <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+        <TieredCompilation>false</TieredCompilation>
+        <TieredPGO>false</TieredPGO>
+        <!-- Disable analyzers for benchmark project -->
+        <NoWarn>$(NoWarn);SA1402;SA1201;SA1202;SA1512;SA1122;SA1129;SA1600;SA1601;SA1602;SA1633;SA1636;MA0006;MA0008;MA0016;MA0048;MA0051;MA0074;CC0001;CC0031;CC0097;CC0120;S1144;S1481;S3358;S4487;CS0219;SEC0115;SEC0117;CS8618</NoWarn>
+        <EnforceCodeStyleInBuild>false</EnforceCodeStyleInBuild>
+        <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <PackageReference Include="BenchmarkDotNet" Version="0.14.0" />
+        <PackageReference Include="Toon" Version="0.0.1-preview-01" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <ProjectReference Include="..\..\..\src\Axon\Axon.csproj" />
+    </ItemGroup>
+
+</Project>

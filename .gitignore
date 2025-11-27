@@ -61,3 +61,5 @@ yarn.lock
 
 # Logs
 *.log
+
+.sarif/

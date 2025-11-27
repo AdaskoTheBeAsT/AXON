@@ -1,3 +1,22 @@
+<div align="center">
+  <img src="assets/axon-banner.svg" alt="AXON - AI eXpress Object Notation" width="800"/>
+  
+  <br/>
+  
+  <img src="assets/axon-icon.svg" alt="AXON Icon" width="120"/>
+
+  <br/><br/>
+
+  ![License](https://img.shields.io/badge/License-MIT-green?style=flat)
+  ![Tokens](https://img.shields.io/badge/Tokens-−74%25%20vs%20JSON-blue?style=flat)
+  ![.NET](https://img.shields.io/badge/.NET-10.0-512BD4?style=flat&logo=dotnet)
+  ![TypeScript](https://img.shields.io/badge/TypeScript-5.0-3178C6?style=flat&logo=typescript)
+  ![Java](https://img.shields.io/badge/Java-21-ED8B00?style=flat&logo=openjdk)
+  ![Go](https://img.shields.io/badge/Go-1.23-00ADD8?style=flat&logo=go)
+  ![Rust](https://img.shields.io/badge/Rust-1.70+-DEA584?style=flat&logo=rust)
+  ![C++](https://img.shields.io/badge/C++-17-00599C?style=flat&logo=cplusplus)
+</div>
+
 # 🌐 AXON — AI eXpress Object Notation
 
 *The Next-Generation™ Paradigm-Shifting™ AI-Native™ Cloud-Scale™ Blockchain-Agnostic™ Data Format*
@@ -117,34 +136,50 @@ Instead of this JSON nightmare:
 ```
 
 You get clean, LLM-friendly tables:
-```
-@schema User
-id:I|name:S
-@data User[1]
+```text
+`User[1](id:I,name:S)
 1|Alice
+~
 
-@schema Order  
-id:I|userId:I
-@data Order[2]
+`Order[2](id:I,userId:I)
 101|1
 102|1
+~
 
-@schema OrderItem
-orderId:I|sku:S|qty:I
-@data OrderItem[2]
+`OrderItem[2](orderId:I,sku:S,qty:I)
 101|A1|2
 102|B2|1
+~
 ```
 
 LLMs are **demonstrably better** at reasoning over relational tables than deeply nested structures. This isn't speculation—it's empirically measurable.
 
 ## 📘 What Is AXON? (The Actual Spec)
 
-AXON is a **schema + data** system that separates structure from content:
+AXON is a **schema + data** system using a compact **backtick/tilde format**:
 
-### Schema Block
-Defines fields and types once:
+### Compact Format (Recommended)
+Schema and data in a single compact block:
+```text
+`User[3](id:I,name:S,email:S,active:B,age:I?)
+1|Alice|alice@example.com|1|28
+2|Bob|bob@example.com|0|_
+3|Carol|carol@example.com|1|35
+~
 ```
+
+**Format breakdown:**
+- `` ` `` — Block start marker
+- `User` — Schema name
+- `[3]` — Row count hint
+- `(id:I,name:S,...)` — Field definitions with types
+- `|` — Field delimiter
+- `_` — Null value
+- `~` — Block end marker
+
+### Verbose Format (Legacy)
+For backwards compatibility:
+```text
 @schema User
 id:I
 name:S
@@ -152,11 +187,7 @@ email:S
 active:B
 age:I?
 @end
-```
 
-### Data Block
-Compact, pipe-delimited rows:
-```
 @data User[3]
 1|Alice|alice@example.com|1|28
 2|Bob|bob@example.com|0|_
@@ -247,6 +278,111 @@ Each implementation includes:
 - Null handling and string escaping
 - Example usage code
 
+## 🔷 C# Implementation Details
+
+![.NET](https://img.shields.io/badge/.NET-10.0-512BD4?style=flat&logo=dotnet)
+![Performance](https://img.shields.io/badge/Parse-244μs-brightgreen?style=flat)
+![Deserialize](https://img.shields.io/badge/Deserialize-1.46x%20faster-orange?style=flat)
+![SIMD](https://img.shields.io/badge/SIMD-AVX2%2FSSE2-purple?style=flat)
+
+### Benchmarks (Release Build, 1000 employees, 500 iterations)
+
+**Parsing:**
+| Format | Time | Per-Op |
+|--------|------|--------|
+| **AXON** | **122ms** | **244µs** |
+
+**Serialization:**
+| Format | Time | Per-Op | vs JSON |
+|--------|------|--------|---------|
+| **AXON** | 207ms | 414µs | **1.15x faster** |
+| JSON | 238ms | 476µs | baseline |
+| TOON | 2178ms | 4356µs | 9.2x slower |
+
+**Deserialization:**
+| Format | Time | Per-Op | vs JSON |
+|--------|------|--------|---------|
+| **AXON** | 255ms | 510µs | **1.46x faster** |
+| JSON | 373ms | 746µs | baseline |
+| TOON | N/A | N/A | no decoder |
+
+### Performance Optimization Techniques
+
+The C# implementation uses advanced .NET performance patterns:
+
+#### 1. `SearchValues<char>` - SIMD Delimiter Scanning
+```csharp
+private static readonly SearchValues<char> Delimiters = SearchValues.Create("|\"\\");
+var idx = remaining.IndexOfAny(Delimiters);
+```
+Uses CPU vector instructions (SSE2/AVX2) to scan 16-32 characters simultaneously.
+
+#### 2. `nint` - Native-Sized Integers
+```csharp
+nint pos = 0;
+nint len = span.Length;
+```
+Matches CPU's native word size, eliminating sign-extension instructions.
+
+#### 3. `MemoryMarshal.GetReference` + `Unsafe.Add` - Direct Memory Access
+```csharp
+ref char start = ref MemoryMarshal.GetReference(span);
+var c = Unsafe.Add(ref lineRef, i++);
+```
+Pointer-style access without bounds-checking overhead.
+
+#### 4. `[SkipLocalsInit]` - Skip Stack Zeroing
+```csharp
+[SkipLocalsInit]
+private static void ParseRowInner(...) { ... }
+```
+Skips runtime zeroing of local variables when immediately assigned.
+
+#### 5. `ArrayPool<char>.Shared` - Buffer Reuse
+```csharp
+var buf = ArrayPool<char>.Shared.Rent(line.Length + 64);
+```
+Reuses heap allocations across parse calls, reducing GC pressure.
+
+#### 6. `FrozenDictionary` - Immutable O(1) Lookup
+```csharp
+_fieldIndex = fields.ToFrozenDictionary(f => f.Name, (f, i) => i);
+```
+Pre-computed perfect hash for true O(1) field name lookups.
+
+#### 7. `readonly record struct` - Stack Allocation
+```csharp
+public readonly record struct FieldDefinition(string Name, AxonType Type, bool IsNullable);
+```
+Value type on stack, no GC allocation, better cache locality.
+
+#### 8. Fast Integer Parsing - 4 Digits at a Time
+```csharp
+while (i + 4 <= len) {
+    result = (result * 10000)
+        + ((Unsafe.Add(ref r, i) - '0') * 1000)
+        + ((Unsafe.Add(ref r, i + 1) - '0') * 100)
+        + ((Unsafe.Add(ref r, i + 2) - '0') * 10)
+        + (Unsafe.Add(ref r, i + 3) - '0');
+    i += 4;
+}
+```
+Processes 4 digits per iteration, reducing loop overhead by 4x.
+
+#### 9. `[MethodImpl]` Attributes - JIT Hints
+```csharp
+[MethodImpl(MethodImplOptions.AggressiveInlining | MethodImplOptions.AggressiveOptimization)]
+```
+Forces inlining and tells JIT to spend more time optimizing.
+
+### Run C# Benchmarks
+```bash
+cd csharp/test/performance/Axon.PerformanceTest
+dotnet run -c Release -- --tokens    # Token efficiency report
+dotnet run -c Release -- --quick     # Quick performance test
+dotnet run -c Release -- --benchmark # Full BenchmarkDotNet run
+```
+
 ## 🏛️ Vision & Realistic Expectations
 
 **The Hype**: AXON will revolutionize AI data!  
@@ -278,33 +414,58 @@ dotnet add package AXON
 
 ### Parse AXON
 ```csharp
-var (schemas, data) = AxonParser.Parse(fileText);
+var axonData = """
+    `User[3](id:I,name:S,active:B)
+    1|Alice|1
+    2|Bob|0
+    3|Carol|1
+    ~
+    """;
+
+var (schemas, dataBlocks) = AxonParser.Parse(axonData);
+
+foreach (var row in dataBlocks[0].Rows)
+{
+    Console.WriteLine($"ID: {row["id"]}, Name: {row["name"]}");
+}
 ```
 
 ### Serialize to AXON
 ```csharp
-var axon = AxonSerializer.Serialize(schemas, data);
+var axon = AxonSerializer.Serialize(users, "User");
+
+// Time-series optimized (74% smaller than JSON)
+var axon = AxonSerializer.SerializeTimeSeries(metrics, "Metric");
 ```
 
-### Convert JSON → AXON
-```bash
-axon convert input.json output.axon
+### Zero-Allocation Streaming
+```csharp
+AxonParser.ParseWithCallback(axonData, (schema, rowIndex, rowSpan) =>
+{
+    var id = AxonParser.GetFieldAt(rowSpan, 0);
+    var name = AxonParser.GetFieldAt(rowSpan, 1);
+});
 ```
 
 ## 📄 Technical Specification (v1.0)
 
 ### Grammar
 
-**Schema Block**:
+**Compact Format (Recommended)**:
+```text
+`<Name>[<count>](<field1>:<Type>,<field2>:<Type>,...)
+<val1>|<val2>|...|<valN>
+...
+~
 ```
+
+**Verbose Format (Legacy)**:
+```text
 @schema <Name>
 <field>:<Type>[?]
 ...
 @end
-```
 
-**Data Block**:
-```
 @data <Name>[<count>]
 <val1>|<val2>|...|<valN>
 ...
